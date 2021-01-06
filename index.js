@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
       params
     })
     .then(response => {
-      res.json(response.data);
+      res.send(response.data);
     })
     .catch(err => {
       res.send(err);
