@@ -16,8 +16,14 @@ const app = express();
 app.use(cors());
 
 // Create GET request
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   const _url = req.query._url;
+  if (!_url) {
+    const error = new Error('Bad request');
+    return res.send(error);
+  }
+
+  const _reqPath = req.path;
   const params = _.omit(req.query, ['_url', '_contentType', '_isImage']);
   const _contentType = req.query._contentType;
   const _isImage = req.query._isImage;
@@ -34,8 +40,10 @@ app.get('/', (req, res) => {
     otherParams.responseType = 'arraybuffer';
   }
 
+  const fullUrl = `${_url}${_reqPath}`;
+
   api
-    .get(_url, {
+    .get(fullUrl, {
       ...otherParams,
       params
     })
